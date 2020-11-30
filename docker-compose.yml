@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  web:
+    build: .
+    restart: always
+    image: registry.docker.dev.westerops.com/swe573-backend
+    command: >
+      bash -c "python /app/manage.py makemigrations && python /app/manage.py migrate && python /app/manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - .:/app/
+
+
+  db:
+    image: postgres:11
+    restart: always
+    container_name: "swe573_postgres"
+    ports:
+      - "54330:5433"
+    environment:
+      POSTGRES_PASSWORD: swe573
+      POSTGRES_USER: swe573
+      POSTGRES_DB: swe573
+    volumes:
+      - swe573_dbdata:/var/lib/postgresql/data
+
+volumes:
+  swe573_dbdata:
+
