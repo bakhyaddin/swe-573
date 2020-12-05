@@ -4,7 +4,7 @@ services:
   web:
     build: .
     restart: always
-    image: registry.docker.dev.westerops.com/swe573-backend
+    image: swe573-backend
     command: >
       bash -c "python /app/manage.py makemigrations && python /app/manage.py migrate && python /app/manage.py runserver 0.0.0.0:8000"
     ports:
@@ -20,7 +20,7 @@ services:
     restart: always
     container_name: "swe573_postgres"
     ports:
-      - "54330:5433"
+      - "54320:5432"
     environment:
       POSTGRES_PASSWORD: swe573
       POSTGRES_USER: swe573
