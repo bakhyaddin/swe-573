@@ -1,0 +1,49 @@
+version: '3.7'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    command: >
+      bash -c "python /backend/manage.py makemigrations && python /backend/manage.py migrate && python /backend/manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/backend
+
+  db:
+    image: postgres:11
+    restart: always
+    container_name: ${POSTGRESQL_CONTAINER_NAME}
+    ports:
+      - ${POSTGRESQL_PORTS}
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_DB: ${POSTGRESQL_DB}
+    volumes:
+      - swe573_dbdata:/var/lib/postgresql/data
+    
+  frontend:
+    build:
+      context: ./frontend
+    stdin_open: true
+    volumes:
+      - build_folder:/frontend/build
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:8080
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - build_folder:/var/www/frontend
+    depends_on:
+      - backend
+      - frontend
+    
+volumes:
+  build_folder:
+  swe573_dbdata:
