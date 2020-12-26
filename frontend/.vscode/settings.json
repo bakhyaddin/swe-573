@@ -1,0 +1,27 @@
+{
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "launch": {
+    
+    }
+    ,"editor.formatOnSave": true,
+    // disable editor formatting, so eslint can handle it
+    "[javascript]": {
+        "editor.formatOnSave": false,
+    },
+    "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+    // available through eslint plugin in vscode
+    "eslint.autoFixOnSave": true,
+    "eslint.alwaysShowStatus": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+        
+    },
+    
+    // "eslint.workingDirectories": [
+    //     "./backend", 
+    //     "./frontend"
+    // ],
+}
