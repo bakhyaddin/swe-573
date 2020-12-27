@@ -1,14 +1,17 @@
 const CONFIGURATION = {
-  API_URL: 'http://3.249.247.122/',
+  API_URL: () => {
+    if (window.location.origin === 'http://localhost:3000') {
+      return 'http://127.0.0.1:8000/';
+    }
+    return window.location.origin;
+  },
   WITH_CREDENTIALS: false,
   TOKEN_TYPE: 'JWT',
   // TIMEOUT: 10000,
 };
 
 function xmlFetch(config) {
-  const URL = CONFIGURATION.API_URL + config.path;
-
-  console.log(URL);
+  const URL = CONFIGURATION.API_URL() + config.path;
 
   return new Promise((resolve, reject) => {
     const xmlHttpRequest = new XMLHttpRequest();
