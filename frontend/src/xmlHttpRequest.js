@@ -11,7 +11,7 @@ const CONFIGURATION = {
 };
 
 function xmlFetch(config) {
-  const URL = CONFIGURATION.API_URL + config.path;
+  const URL = CONFIGURATION.API_URL() + config.path;
 
   return new Promise((resolve, reject) => {
     const xmlHttpRequest = new XMLHttpRequest();
