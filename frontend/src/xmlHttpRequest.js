@@ -3,7 +3,7 @@ const CONFIGURATION = {
     if (window.location.origin === 'http://localhost:3000') {
       return 'http://127.0.0.1:8000/';
     }
-    return window.location.origin;
+    return `${window.location.origin}/`;
   },
   WITH_CREDENTIALS: false,
   TOKEN_TYPE: 'JWT',

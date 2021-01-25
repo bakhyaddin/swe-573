@@ -1,6 +1,10 @@
 version: '3.7'
 
 services:
+  # && /backend/manage.py shell < /backend/posts/runapscheduler.py
+  # && /backend/manage.py fetch_twits_scheduler
+  # python manage.py migrate --run-syncdb
+
   backend:
     image: swe573_backend:1.0.0
     build:
@@ -27,25 +31,20 @@ services:
       POSTGRES_DB: ${POSTGRESQL_DB}
     volumes:
       - swe573_dbdata:/var/lib/postgresql/data
-    
+
   frontend:
     image: swe573_frontend:1.0.0
     build:
       context: ./frontend
     stdin_open: true
     restart: always
-    # volumes:
-    #   - build_folder:/frontend/build
     ports:
       - 80:80
       - 443:443
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      # - build_folder:/var/www/frontend
     depends_on:
       - backend
-      # - frontend
     
 volumes:
-  # build_folder:
   swe573_dbdata:

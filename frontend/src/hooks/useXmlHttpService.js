@@ -39,6 +39,7 @@ const getReuqestedData = async (values) => {
     const response = await xmlHttpRequest({
       method: 'POST',
       path: 'posts/posts/',
+      sendToken: true,
       body: {
         search: values.search,
       },

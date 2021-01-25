@@ -1,103 +1,105 @@
 from django.shortcuts import render
+from django.utils import timezone
+from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR
 from rest_framework.exceptions import ValidationError
 
+from datetime import datetime
 import requests
-import os
 import json
 from decouple import config
 
-bearer_token = config("TWITTER_BEARER_TOKEN")
+from posts.models import SearchedEntities, Twits
+from posts.serializers import TwitSerializer
+from posts import recent
+from posts.preprocessing import CleanData
+from posts.sentiment import Sentiment
+from posts.wordcloud import WordCloud
+# from posts.entity_linking import EntityLinker
+from posts.ngram import NGram
+import utils
 
+get_recent_posts = recent.Recent()
+get_recent_posts.bearer_token = config('TWITTER_BEARER_TOKEN')
 
-def create_headers(bearer_token):
-    headers = {"Authorization": "Bearer {}".format(bearer_token)}
-    return headers
+clean_data = CleanData().clean_data
+sentiment = Sentiment()
+wordcloud = WordCloud()
+ngram = NGram()
+# entity_linker = EntityLinker()
 
-
-def get_rules(headers, bearer_token):
-    response = requests.get(
-        "https://api.twitter.com/2/tweets/search/stream/rules", headers=headers
-    )
-    if response.status_code != 200:
-        raise Exception(
-            "Cannot get rules (HTTP {}): {}".format(response.status_code, response.text)
-        )
-    print(json.dumps(response.json()))
-    return response.json()
-
-
-def delete_all_rules(headers, bearer_token, rules):
-    if rules is None or "data" not in rules:
-        return None
-
-    ids = list(map(lambda rule: rule["id"], rules["data"]))
-    payload = {"delete": {"ids": ids}}
-    response = requests.post(
-        "https://api.twitter.com/2/tweets/search/stream/rules",
-        headers=headers,
-        json=payload
-    )
-    if response.status_code != 200:
-        raise Exception(
-            "Cannot delete rules (HTTP {}): {}".format(
-                response.status_code, response.text
-            )
-        )
-    print(json.dumps(response.json()))
-
-
-def set_rules(headers, delete, bearer_token):
-    # You can adjust the rules if needed
-    sample_rules = [
-        {"value": "dog has:images", "tag": "dog pictures"},
-        {"value": "cat has:images -grumpy", "tag": "cat pictures"},
-    ]
-    payload = {"add": sample_rules}
-    response = requests.post(
-        "https://api.twitter.com/2/tweets/search/stream/rules",
-        headers=headers,
-        json=payload,
-    )
-    if response.status_code != 201:
-        raise Exception(
-            "Cannot add rules (HTTP {}): {}".format(response.status_code, response.text)
-        )
-    print(json.dumps(response.json()))
-
-
-def get_stream(headers, set, bearer_token):
-    response = requests.get(
-        "https://api.twitter.com/2/tweets/search/stream", headers=headers, stream=True,
-    )
-    print(response.status_code)
-    if response.status_code != 200:
-        raise Exception(
-            "Cannot get stream (HTTP {}): {}".format(
-                response.status_code, response.text
-            )
-        )
-    for response_line in response.iter_lines():
-        if response_line:
-            json_response = json.loads(response_line)
-            print(json.dumps(json_response, indent=4, sort_keys=True))
-
-
-def main():
-    bearer_token = os.environ.get("BEARER_TOKEN")
-    headers = create_headers(bearer_token)
-    rules = get_rules(headers, bearer_token)
-    delete = delete_all_rules(headers, bearer_token, rules)
-    set = set_rules(headers, delete, bearer_token)
-    get_stream(headers, set, bearer_token)
-
-
-if __name__ == "__main__":
-    main()
 
 class PostsAPIView(APIView):
     def post(self, request, *args, **kwargs):
-        print(request.data)
-        return Response(request.data.get("search"), HTTP_200_OK)
+        response = None
+
+        searched_entity = request.data.get("search")
+        entity = SearchedEntities.objects.filter(entity=searched_entity).first()
+        if not entity:
+            try:
+                # create an entity in the DB
+                try:
+                    entity = SearchedEntities.objects.create(entity=searched_entity)
+                    entity.save()
+                except Exception as e:
+                    return Response({"message": "Could not create the entity in the database"}, HTTP_500_INTERNAL_SERVER_ERROR)
+
+                # fetching twits
+                twits = None
+                try:
+                    get_recent_posts.entity = searched_entity
+                    twits = get_recent_posts.get_query()
+                except Exception as e:
+                    return Response(e, HTTP_500_INTERNAL_SERVER_ERROR)
+
+                for twit in twits["data"]:
+                    # create the twit in the database
+                    try:
+                        tw = Twits.objects.create(
+                            id=twit["id"],
+                            text=twit["text"],
+                            entity=entity,
+                            created_at=datetime.fromisoformat(twit["created_at"][:-1])
+                        )
+                        tw.save()
+                    except Exception as e:
+                        entity.delete()
+                        return Response({"message": "Could not create the twit in the database"}, HTTP_500_INTERNAL_SERVER_ERROR)
+                
+                # analyze data here
+                return Response(twits["data"], HTTP_200_OK)
+            except:
+                entity.delete()
+                return Response({"message": "Database error"}, HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        else:
+            twits = None
+            try:
+                twit_response = []
+                twit_serialiazer = TwitSerializer
+                twits = Twits.objects.all().filter(entity=entity)
+
+                for twit in twits:
+                    try:
+                        twit_response.append(clean_data(twit_serialiazer(twit).data["text"]))
+                    except Exception as e:
+                        print(e)
+
+                # sentiment.data = twit_response
+                ngram.data = twit_response
+                # try:
+                #     sentiment.analyze()
+                # except Exception as e:
+                #     print(e)
+                bigram = None
+                try:
+                    bigram = ngram.get_bigram()
+                except Exception as e:
+                    print("Error", e)
+                # analyze data here
+                # return Response(bigram, HTTP_200_OK)
+                return HttpResponse(bigram, content_type="image/png", status=HTTP_200_OK)
+            except Exception as e:
+                return Response({"message": "Could not fetch twits from the database"}, HTTP_500_INTERNAL_SERVER_ERROR)

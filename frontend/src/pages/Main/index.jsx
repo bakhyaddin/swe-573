@@ -7,7 +7,9 @@ import Form from './components/Form';
 
 const Main = () => {
   const getSearchedData = (values) => {
-    getReuqestedData(values);
+    getReuqestedData(values)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
   return (
     <StyledMain>
