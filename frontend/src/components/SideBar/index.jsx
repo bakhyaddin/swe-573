@@ -1,10 +1,10 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Search, Profile } from '../../assets/icons';
+import { Search, Results } from '../../assets/icons';
 import MenuItem from '../MenuItem';
 import Sider from './styles';
-// import WOPS from '../../assets/wops.png';
+import nerdwits from '../../assets/nerdwits_white.png';
 
 const menuItemsData = [
   {
@@ -13,9 +13,9 @@ const menuItemsData = [
     path: '/',
   },
   {
-    Icon: Profile,
-    name: 'Profile',
-    path: '/profile',
+    Icon: Results,
+    name: 'Results',
+    path: '/results',
   },
 ];
 
@@ -25,7 +25,7 @@ const SideBar = () => {
   return (
     <Sider>
       <div className="logo-container">
-        <img className="logo" alt="logo" src={null} />
+        <img className="logo" alt="logo" style={{ height: '100%' }} src={nerdwits} />
       </div>
       <div className="menu-items-container">
         {menuItemsData.map((item) => (

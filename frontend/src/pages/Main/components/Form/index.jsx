@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, Select, DatePicker } from 'antd';
+import { Input, Select } from 'antd';
 
 import Form from './styles';
 import Button from '../../../../components/Button';
 
 const DataForm = ({ getSearchedData }) => {
   const { Option } = Select;
-  const { RangePicker } = DatePicker;
+  // const { RangePicker } = DatePicker;
 
   const options = [
     { name: 'Bigram Network', value: 'bigram' },
@@ -42,13 +42,13 @@ const DataForm = ({ getSearchedData }) => {
           {options.map((item) => (<Option value={item.value}>{item.name}</Option>))}
         </Select>
       </Form.Item>
-      <Form.Item
+      {/* <Form.Item
         name="range"
         label="Range"
         labelCol={{ span: 24 }}
       >
         <RangePicker />
-      </Form.Item>
+      </Form.Item> */}
       <Button type="primary" htmlType="submit">
         Search
       </Button>

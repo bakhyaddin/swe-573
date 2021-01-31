@@ -76,6 +76,19 @@ const getResults = async () => {
   }
 };
 
+const deleteResult = async (id) => {
+  try {
+    const response = await xmlHttpRequest({
+      method: 'DELETE',
+      path: `posts/delete-result/${id}/`,
+      sendToken: true,
+    });
+    return Promise.resolve(response);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 export {
-  useLogin, useRegister, getReuqestedData, useCheckToken, getResults,
+  useLogin, useRegister, getReuqestedData, useCheckToken, getResults, deleteResult,
 };

@@ -7,24 +7,27 @@ import Login from './pages/Auth/Login';
 import Signup from './pages/Auth/Signup';
 import Main from './pages/Main';
 import Logout from './pages/Auth/Logout';
-import Profile from './pages/Profile';
+import Results from './pages/Results';
 import NotFound from './pages/NotFound';
 
 import { useCheckToken } from './hooks/useXmlHttpService';
 // import useMediaQuery from './hooks/useMediaQuery';
 
-import MainContest from './components/MainContent';
+import MainContent from './components/MainContent';
 
 const Routes = () => {
   let user = window.localStorage.getItem('userSWE573') ? JSON.parse(window.localStorage.getItem('userSWE573')) : null;
-  // const history = useHistory();
+
   // eslint-disable-next-line consistent-return
   useEffect(() => {
-    useCheckToken()
-      .then(() => {})
-      .catch(() => {
-        window.location.replace('/logout');
-      });
+    user = window.localStorage.getItem('userSWE573');
+    if (user) {
+      useCheckToken()
+        .then(() => {})
+        .catch(() => {
+          window.location.hostname('/logout');
+        });
+    }
   }, [user]);
 
   // eslint-disable-next-line react/prop-types
@@ -43,13 +46,9 @@ const Routes = () => {
     <Switch>
       <Route path="/login" exact component={Login} />
       <Route path="/signup" exact component={Signup} />
-      <Route path="/logout" exact component={Logout} />
-      <Redirect to="/logout" />
+      <Redirect to="/login" />
     </Switch>
   );
-
-  // TODO
-  // when going to the address /logout it redirect the user to the main page
 
   if (user) {
     route = (
@@ -57,14 +56,14 @@ const Routes = () => {
         <PrivateRoute exact path="/login">
           <Login />
         </PrivateRoute>
-        <MainContest>
+        <MainContent>
           <Switch>
             <Route path="/" exact component={Main} />
             <Route path="/logout" exact component={Logout} />
-            <Route path="/profile" exact component={Profile} />
+            <Route path="/results" exact component={Results} />
             <Route component={NotFound} />
           </Switch>
-        </MainContest>
+        </MainContent>
       </>
     );
   }

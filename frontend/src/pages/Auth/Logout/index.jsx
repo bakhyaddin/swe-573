@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 
 const Logout = () => {
-  window.localStorage.removeItem('userSWE573');
-  window.localStorage.removeItem('tokenSWE573');
+  useEffect(() => {
+    window.localStorage.removeItem('userSWE573');
+    window.localStorage.removeItem('tokenSWE573');
+    window.location.reload();
+  }, []);
   return <Redirect to="/login" />;
 };
 

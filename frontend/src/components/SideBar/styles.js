@@ -14,7 +14,7 @@ export default styled.div`
         flex-direction: row;
         justify-content: center;
         width: 100%;
-        height: 15vh;
+        height: 20vh;
         .logo{
             height: 100%;
         }

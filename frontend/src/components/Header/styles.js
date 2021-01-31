@@ -18,6 +18,7 @@ export default styled(Row)`
     box-shadow: ${({ theme }) => `${theme.main.boxShadow} ${theme.main.colors.borderColor}`};
     background-color: ${({ theme, ismobile }) => (ismobile ? theme.main.colors.primaryColorLight : 'white')};
     color: ${({ ismobile }) => (ismobile ? 'white' : 'black')};
+    padding: 0px 15px;
 
     .text{
         margin: 0px;

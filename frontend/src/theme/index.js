@@ -9,7 +9,7 @@ const orange = '#FFC06A';
 const red = '#F7A09D';
 const borderColor = '#F1F1F3';
 const backgroundColor = '#F0F2F5';
-const boxShadow = '0px 1px 5px 0px';
+const boxShadow = `0px 1px 5px 0px ${primaryColorDark}`;
 
 const paddingVertical = '12px';
 const paddingHorizontal = '24px';

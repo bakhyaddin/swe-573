@@ -39,8 +39,8 @@ class PostsAPIView(APIView):
         twit_serialiazer = TwitSerializer
         searched_entity = request.data.get("search")
         result_types = request.data.get("result-type")
-        token = request.headers["Authorization"].split(" ")[1]
-        user = jwt.decode(token, config('DJANGO_SECRET_KEY'))
+        user_id = request.user.id
+        
         entity = SearchedEntities.objects.filter(entity=searched_entity).first()
 
         if not entity:
@@ -83,8 +83,9 @@ class PostsAPIView(APIView):
                         return Response({"message": "Could not create twits in the database"}, HTTP_500_INTERNAL_SERVER_ERROR)
                 
                 """ Analyze Data """
+                # get all recently created twits
                 twits = Twits.objects.all().filter(entity=entity)
-                analyze_data(twit_serialiazer, twits, user, result_types)
+                analyze_data(twit_serialiazer, twits, user_id, result_types, searched_entity)
 
                 return Response("SUP", HTTP_200_OK)
             except Exception as e:
@@ -113,9 +114,8 @@ class PostsAPIView(APIView):
                         except Exception as e:
                             print(e)
 
-
-
-                analyze_data(twit_serialiazer, twits, user, result_types)
+                """ Analyze Data """
+                analyze_data(twit_serialiazer, twits, user_id, result_types, searched_entity)
                 
                 return HttpResponse("Done", content_type="image/png", status=HTTP_200_OK)
             except Exception as e:
@@ -128,12 +128,17 @@ class GetResultsAPI(APIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def get(self, request):
-        results = Results.objects.filter(user_id=request.user.id)
-        return Response([self.serializer_class(result).data for result in results], HTTP_200_OK)
+        try:
+            results = Results.objects.filter(user_id=request.user.id)
+            return Response([self.serializer_class(result).data for result in results], HTTP_200_OK)
+        except Exception as e:
+            return Response(e, HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class DeleteResultsAPI(APIView):
     def delete(self, request, *args, **kwargs):
-        result = Results.objects.filter(user_id=request.user.id).get(id=kwargs.get("pk"))
+        result = Results.objects.filter(user_id=request.user.id)
+        result = result.get(id=kwargs.get("pk"))
         try:
             result.delete()
             return Response({"message": "Result is deleted"}, HTTP_200_OK)
@@ -142,17 +147,17 @@ class DeleteResultsAPI(APIView):
 
 
 
-def analyze_data(twit_serialiazer, twits, user, result_types):
+def analyze_data(twit_serialiazer, twits, user_id, result_types, entity):
     # fetching all cleaned data from the DB
 
     all_cleaned_text = [twit_serialiazer(twit).data["cleaned_text"] for twit in twits]
     
     # getting the user
-    user = UserTemplate.objects.get(id = user["user_id"])
+    user = UserTemplate.objects.get(id = user_id)
     
     # creating results object
     try:
-        results = Results.objects.create(user_id=user)
+        results = Results.objects.create(user_id=user, entity=entity)
         results.twits.set(twits)
         results.save()
     except Exception as e:

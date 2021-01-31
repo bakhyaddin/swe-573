@@ -5,16 +5,18 @@ import { useRegister } from '../../../hooks/useXmlHttpService';
 
 import Button from '../../../components/Button';
 
+import FinishSignUp from '../FinishSignUp';
 import LoginStyled from './styles';
 
 const Signup = () => {
   const [signupLoading, setSignupLoading] = useState(false);
+  const [isSignUpFinished, setIsSignUpFinished] = useState(false);
 
   const onFinish = (userdata) => {
     setSignupLoading(true);
     useRegister(userdata)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        setIsSignUpFinished(true);
       })
       .catch((error) => {
         message.error(error.detail[0]);
@@ -26,75 +28,78 @@ const Signup = () => {
 
   return (
     <LoginStyled>
-      <div className="card">
-        <h1 className="card-header">REGISTER</h1>
-        <Form
-          name="register"
-          className="form"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-        >
-          <Form.Item
-            name="name"
-            rules={[{ required: true, message: 'Please input your Name!' }]}
-          >
-            <Input
-              placeholder="Name"
-            />
-          </Form.Item>
+      {isSignUpFinished ? <FinishSignUp />
+        : (
+          <div className="card">
+            <h1 className="card-header">REGISTER</h1>
+            <Form
+              name="register"
+              className="form"
+              initialValues={{ remember: true }}
+              onFinish={onFinish}
+            >
+              <Form.Item
+                name="name"
+                rules={[{ required: true, message: 'Please input your Name!' }]}
+              >
+                <Input
+                  placeholder="Name"
+                />
+              </Form.Item>
 
-          <Form.Item
-            name="surname"
-            rules={[{ required: true, message: 'Please input your Surname!' }]}
-          >
-            <Input
-              placeholder="Surname"
-            />
-          </Form.Item>
+              <Form.Item
+                name="surname"
+                rules={[{ required: true, message: 'Please input your Surname!' }]}
+              >
+                <Input
+                  placeholder="Surname"
+                />
+              </Form.Item>
 
-          <Form.Item
-            name="email"
-            rules={[
-              { type: 'email', message: 'Please input a valid e-mail!' },
-              { required: true, message: 'Please input your e-mail!' }]}
-          >
-            <Input placeholder="E-mail address" />
-          </Form.Item>
+              <Form.Item
+                name="email"
+                rules={[
+                  { type: 'email', message: 'Please input a valid e-mail!' },
+                  { required: true, message: 'Please input your e-mail!' }]}
+              >
+                <Input placeholder="E-mail address" />
+              </Form.Item>
 
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: 'Please input your Password!' }]}
-          >
-            <Input.Password
-              type="password"
-              placeholder="Password"
-            />
-          </Form.Item>
+              <Form.Item
+                name="password"
+                rules={[{ required: true, message: 'Please input your Password!' }]}
+              >
+                <Input.Password
+                  type="password"
+                  placeholder="Password"
+                />
+              </Form.Item>
 
-          <Form.Item
-            name="confirm"
-            rules={[
-              { required: true, message: 'Please confirm your Password!' },
-              ({ getFieldValue }) => ({
-                validator(rule, value) {
-                  if (!value || getFieldValue('password') === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(Error('The two passwords must match!'));
-                },
-              }),
-            ]}
-          >
-            <Input.Password
-              type="password"
-              placeholder="Confirm Password"
-            />
-          </Form.Item>
-          <Button className="button left" loading={signupLoading} type="primary" htmlType="submit">
-            Register
-          </Button>
-        </Form>
-      </div>
+              <Form.Item
+                name="confirm"
+                rules={[
+                  { required: true, message: 'Please confirm your Password!' },
+                  ({ getFieldValue }) => ({
+                    validator(rule, value) {
+                      if (!value || getFieldValue('password') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(Error('The two passwords must match!'));
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password
+                  type="password"
+                  placeholder="Confirm Password"
+                />
+              </Form.Item>
+              <Button className="button left" loading={signupLoading} type="primary" htmlType="submit">
+                Register
+              </Button>
+            </Form>
+          </div>
+        )}
     </LoginStyled>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Search, Profile } from '../../../assets/icons';
+import { Search, Results } from '../../../assets/icons';
 import MenuItem from '../../MenuItem';
 import BottomNavBarStyle from './styles';
 
@@ -12,9 +12,9 @@ const menuItemsData = [
     path: '/',
   },
   {
-    Icon: Profile,
-    name: 'Profile',
-    path: '/profile',
+    Icon: Results,
+    name: 'Results',
+    path: '/results',
   },
 ];
 

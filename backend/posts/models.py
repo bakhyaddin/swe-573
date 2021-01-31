@@ -15,9 +15,11 @@ class Twits(models.Model):
     entity = models.ForeignKey(SearchedEntities, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(default=timezone.now, blank=True)
     sentiment = models.CharField(max_length=100, blank=True, null=True, unique=False)
+    unique_together = ('created_at', 'entity', 'id')
 
 
 class Results(models.Model):
+    entity = models.CharField(max_length=100, blank=True, null=True, unique=False)
     twits = models.ManyToManyField(Twits, blank=True, related_name='results')
     user_id = models.ForeignKey(UserTemplate, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(default=timezone.now, blank=True)
