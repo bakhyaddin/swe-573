@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { message } from 'antd';
 import { getReuqestedData } from '../../hooks/useXmlHttpService';
 
 import ContentContainer from '../../components/ContentContainer';
@@ -10,11 +11,14 @@ import useMediaQuery from '../../hooks/useMediaQuery';
 
 const Main = () => {
   const { ismobile } = useMediaQuery();
+  const [loading, setLoading] = useState(false);
 
   const getSearchedData = (values) => {
+    setLoading(true);
     getReuqestedData(values)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then(() => message.success('Your results are ready!'))
+      .catch(() => message.error('Something went wrong!'))
+      .finally(setLoading(false));
   };
   return (
     <>
@@ -22,6 +26,7 @@ const Main = () => {
       <ContentContainer>
         <Form
           getSearchedData={(values) => getSearchedData(values)}
+          loading={loading}
         />
       </ContentContainer>
     </>

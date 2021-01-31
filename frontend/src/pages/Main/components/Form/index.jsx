@@ -5,7 +5,7 @@ import { Input, Select } from 'antd';
 import Form from './styles';
 import Button from '../../../../components/Button';
 
-const DataForm = ({ getSearchedData }) => {
+const DataForm = ({ getSearchedData, loading }) => {
   const { Option } = Select;
   // const { RangePicker } = DatePicker;
 
@@ -49,7 +49,7 @@ const DataForm = ({ getSearchedData }) => {
       >
         <RangePicker />
       </Form.Item> */}
-      <Button type="primary" htmlType="submit">
+      <Button loading={loading} type="primary" htmlType="submit">
         Search
       </Button>
     </Form>
@@ -58,6 +58,7 @@ const DataForm = ({ getSearchedData }) => {
 
 DataForm.propTypes = {
   getSearchedData: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default DataForm;
