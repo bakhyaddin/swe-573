@@ -1,5 +1,5 @@
 # pull official base image
-FROM node:13.12.0-alpine as build
+FROM node:12.16.0-alpine as build
 
 # set working directory
 WORKDIR /app
@@ -11,7 +11,6 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json /app/package.json
 COPY package-lock.json /app/package-lock.json
 RUN npm install
-
 
 # add app
 COPY . /app

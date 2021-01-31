@@ -172,7 +172,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-IS_LOCAL = False
+IS_LOCAL = True
 
 
 # Static files (CSS, JavaScript, Images)
