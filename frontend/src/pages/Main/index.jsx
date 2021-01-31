@@ -1,23 +1,30 @@
 import React from 'react';
 import { getReuqestedData } from '../../hooks/useXmlHttpService';
 
-import StyledMain from './styles';
+import ContentContainer from '../../components/ContentContainer';
 import Header from '../../components/Header';
+// import StyledMain from './styles';
 import Form from './components/Form';
 
+import useMediaQuery from '../../hooks/useMediaQuery';
+
 const Main = () => {
+  const { ismobile } = useMediaQuery();
+
   const getSearchedData = (values) => {
     getReuqestedData(values)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
   return (
-    <StyledMain>
-      <Header />
-      <Form
-        getSearchedData={(values) => getSearchedData(values)}
-      />
-    </StyledMain>
+    <>
+      <Header ismobile={ismobile} title="Search" />
+      <ContentContainer>
+        <Form
+          getSearchedData={(values) => getSearchedData(values)}
+        />
+      </ContentContainer>
+    </>
 
   );
 };

@@ -4,17 +4,20 @@ from textblob import TextBlob
 class Sentiment():
     data = None
     def analyze(self):
-        tweet = TextBlob(" ".join(self.data))
-
-        # wordcloud.data = tweet
-        # wordcloud.get_word_cloud()
+        twit = self.data
+        if isinstance(twit, list):
+            twit = TextBlob(" ".join(twit))
+        
+        twit = TextBlob(str(twit))
 
         # determine if sentiment is positive, negative, or neutral
-        if tweet.sentiment.polarity < 0:
-            sentiment = "negative"
-        elif tweet.sentiment.polarity == 0:
-            sentiment = "neutral"
-        else:
-            sentiment = "positive"
+        # if tweet.sentiment.polarity < 0:
+        #     sentiment = "negative"
+        # elif tweet.sentiment.polarity == 0:
+        #     sentiment = "neutral"
+        # else:
+        #     sentiment = "positive"
 
-        print(tweet.sentiment.polarity, sentiment)
+        # print(twit.sentiment)
+
+        return(str("{:.2f}".format(twit.sentiment.polarity)))

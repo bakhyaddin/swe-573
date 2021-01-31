@@ -12,8 +12,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 
 # from decouple import Config, RepositoryEnv
+import datetime
 from pathlib import Path
 from decouple import config, Csv
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -129,22 +131,32 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 
-APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
+REST_FRAMEWORK = {
 
-# This scheduler config will:
-# - Store jobs in the project database
-# - Execute jobs in threads inside the application process
-# SCHEDULER_CONFIG = {
-#     "apscheduler.jobstores.default": {
-#         "class": "django_apscheduler.jobstores:DjangoJobStore"
-#     },
-#     'apscheduler.executors.processpool': {
-#         "type": "threadpool"
-#     },
-# }
-# SCHEDULER_AUTOSTART = True
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 1000
+}
+
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=259200),
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(seconds=259200),  # 3 days
+    'JWT_AUTH_COOKIE': 'JWT',
+}
+
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = config('EMAIL_ADDRESS')
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
+EMAIL_PORT = 587
 
 
 # Internationalization
@@ -160,8 +172,14 @@ USE_L10N = True
 
 USE_TZ = True
 
+IS_LOCAL = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

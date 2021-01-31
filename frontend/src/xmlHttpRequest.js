@@ -1,6 +1,6 @@
 const CONFIGURATION = {
   API_URL: () => {
-    if (window.location.origin === 'http://localhost:3000') {
+    if (window.location.origin === 'http://localhost:3000' || window.location.origin === 'http://127.0.0.1:3000') {
       return 'http://127.0.0.1:8000/';
     }
     return `${window.location.origin}/`;
@@ -52,7 +52,7 @@ function xmlFetch(config) {
     if (config.sendToken) {
       xmlHttpRequest.setRequestHeader(
         'Authorization',
-        `${CONFIGURATION.TOKEN_TYPE} ${window.localStorage.getItem('tokenTestMaker')}`,
+        `${CONFIGURATION.TOKEN_TYPE} ${window.localStorage.getItem('tokenSWE573')}`,
       );
     }
 

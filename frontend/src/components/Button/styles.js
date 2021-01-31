@@ -11,9 +11,9 @@ export default styled(Button)`
   background: ${({ type, theme }) => {
     switch (type) {
       case 'primary':
-        return theme.main.colors.primaryColor;
+        return theme.main.colors.primaryColorDark;
       case 'secondary':
-        return theme.main.colors.secondaryColor;
+        return theme.main.colors.green;
       case 'link':
         return 'transparent';
       default:
@@ -37,7 +37,7 @@ export default styled(Button)`
       case 'primary':
         return theme.main.colors.primaryColor;
       case 'secondary':
-        return theme.main.colors.secondaryColor;
+        return theme.main.colors.green;
       case 'link':
         return 'transparent';
       default:
@@ -52,7 +52,7 @@ export default styled(Button)`
       case 'primary':
         return theme.main.colors.primaryColor;
       case 'secondary':
-        return theme.main.colors.secondaryColor;
+        return theme.main.colors.green;
       case 'link':
         return 'transparent';
       default:
@@ -76,7 +76,7 @@ export default styled(Button)`
       case 'primary':
         return theme.main.colors.primaryColor;
       case 'secondary':
-        return theme.main.colors.secondaryColor;
+        return theme.main.colors.green;
       case 'link':
         return 'transparent';
       default:

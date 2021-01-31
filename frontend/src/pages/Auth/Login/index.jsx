@@ -17,7 +17,7 @@ const Login = () => {
     useLogin(userdata)
       .then((res) => {
         window.localStorage.setItem('userSWE573', JSON.stringify(res.user));
-        window.localStorage.setItem('tokenSWE573', JSON.stringify(res.token));
+        window.localStorage.setItem('tokenSWE573', res.token);
         window.location.replace('/');
       })
       .catch((error) => {

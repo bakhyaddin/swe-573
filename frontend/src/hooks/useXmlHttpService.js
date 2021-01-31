@@ -1,5 +1,20 @@
 import xmlHttpRequest from '../xmlHttpRequest';
 
+// const user = JSON.parse(window.localStorage.getItem('userSWE573'));
+
+const useCheckToken = async () => {
+  try {
+    const response = await xmlHttpRequest({
+      method: 'GET',
+      path: 'auth/check-token/',
+      sendToken: true,
+    });
+    return Promise.resolve(response);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 const useLogin = async (userdata) => {
   try {
     const response = await xmlHttpRequest({
@@ -40,9 +55,7 @@ const getReuqestedData = async (values) => {
       method: 'POST',
       path: 'posts/posts/',
       sendToken: true,
-      body: {
-        search: values.search,
-      },
+      body: values,
     });
     return Promise.resolve(response);
   } catch (error) {
@@ -50,4 +63,19 @@ const getReuqestedData = async (values) => {
   }
 };
 
-export { useLogin, useRegister, getReuqestedData };
+const getResults = async () => {
+  try {
+    const response = await xmlHttpRequest({
+      method: 'GET',
+      path: 'posts/get-results/',
+      sendToken: true,
+    });
+    return Promise.resolve(response);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export {
+  useLogin, useRegister, getReuqestedData, useCheckToken, getResults,
+};

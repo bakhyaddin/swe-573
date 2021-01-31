@@ -21,6 +21,7 @@ class UserTemplate(AbstractBaseUser, PermissionsMixin):
     surname = models.CharField(max_length=255)
     token = models.CharField(max_length=4000, blank=True)
     is_active = models.BooleanField(default=True)
+    is_verified = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
     objects = UserProfileManager()

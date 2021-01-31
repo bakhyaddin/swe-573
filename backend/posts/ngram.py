@@ -9,13 +9,13 @@ import collections
 
 import io
 
-import urllib, base64
+import urllib
 
 class NGram():
     data = None
 
     def get_bigram(self):
-        terms_bigram = [list(bigrams(tweet.split(" "))) for tweet in self.data]
+        terms_bigram = [list(bigrams(twit.split(" "))) for twit in self.data]
         bigram = list(itertools.chain(*terms_bigram))
         bigram_counts = collections.Counter(bigram)
         bigram_counts.most_common(20)
