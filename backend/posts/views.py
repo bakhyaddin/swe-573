@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.http import HttpResponse
 from rest_framework.views import APIView
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveAPIView, ListAPIView
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR
@@ -133,6 +133,11 @@ class GetResultsAPI(APIView):
             return Response([self.serializer_class(result).data for result in results], HTTP_200_OK)
         except Exception as e:
             return Response(e, HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class GetAllTwitsAPI(ListAPIView):
+    serializer_class = TwitSerializer
+    queryset = Twits.objects.all()
 
 
 class DeleteResultsAPI(APIView):
