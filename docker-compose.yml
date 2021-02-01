@@ -1,10 +1,6 @@
 version: '3.7'
 
 services:
-  # && /backend/manage.py shell < /backend/posts/runapscheduler.py
-  # && /backend/manage.py fetch_twits_scheduler
-  # python manage.py migrate --run-syncdb
-
   backend:
     image: swe573_backend:1.0.0
     build:
@@ -42,8 +38,8 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./nginx/357155870B1223942DC74C3B47A6C463.txt:/.well-known/pki-validation/357155870B1223942DC74C3B47A6C463.txt
+      - ./nginx/nginx-prod.conf:/etc/nginx/conf.d/default.conf:ro
+      # - ./nginx/357155870B1223942DC74C3B47A6C463.txt:/.well-known/pki-validation/357155870B1223942DC74C3B47A6C463.txt
     depends_on:
       - backend
     
