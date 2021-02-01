@@ -38,8 +38,7 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./nginx/nginx-prod.conf:/etc/nginx/conf.d/default.conf:ro
-      # - ./nginx/357155870B1223942DC74C3B47A6C463.txt:/.well-known/pki-validation/357155870B1223942DC74C3B47A6C463.txt
+      - ./frontend/nginx/nginx-prod.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - backend
     
