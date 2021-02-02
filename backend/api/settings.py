@@ -26,8 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('DJANGO_SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
 
 ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", cast=Csv())
 
@@ -172,7 +171,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-IS_LOCAL = True
+IS_LOCAL = False
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
 
 
 # Static files (CSS, JavaScript, Images)
