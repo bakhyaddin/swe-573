@@ -18,7 +18,6 @@ COPY . /app
 # start app
 RUN npm run build
 
-# COPY 357155870B1223942DC74C3B47A6C463.txt /app/build/.well-known/pki-validation/357155870B1223942DC74C3B47A6C463.txt
 
 # production environment
 FROM nginx:1.16.0-alpine

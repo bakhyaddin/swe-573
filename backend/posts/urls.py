@@ -9,7 +9,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import time
 
 sched = BackgroundScheduler()
-sched.add_job(fetch_twits, 'interval', id='fetch_twits', minutes=15)
+sched.add_job(fetch_twits, 'interval', id='fetch_twits', minutes=30)
 sched.start()
 
 
