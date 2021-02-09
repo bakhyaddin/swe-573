@@ -5,12 +5,12 @@ from django.urls import path
 from posts.fetch_twits_scheduler import fetch_twits
 
 
-from apscheduler.schedulers.background import BackgroundScheduler
-import time
+# from apscheduler.schedulers.background import BackgroundScheduler
+# import time
 
-sched = BackgroundScheduler()
-sched.add_job(fetch_twits, 'interval', id='fetch_twits', minutes=30)
-sched.start()
+# sched = BackgroundScheduler()
+# sched.add_job(fetch_twits, 'interval', id='fetch_twits', minutes=30)
+# sched.start()
 
 
 urlpatterns = [
