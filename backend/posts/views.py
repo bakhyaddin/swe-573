@@ -97,6 +97,7 @@ class PostsAPIView(APIView):
             try:
                 twits = Twits.objects.all().filter(entity=entity)
 
+
                 # creating cleaned_text filed in the twits that do not have
                 for twit in twits:
                     cleaned_text = clean_data(twit_serialiazer(twit).data["text"])
@@ -177,9 +178,9 @@ def analyze_data(twit_serialiazer, twits, user_id, result_types, entity):
                 graph_img = ngram.get_bigram()
                 results.graph_img = graph_img
             except Exception as e:
+                print("ERROR", e)
                 results.delete()
                 return Response({"message": "Something went wrong"}, HTTP_500_INTERNAL_SERVER_ERROR)
-                print(e)
         
         # generating wordcloud
         if result_type == "wordcloud":

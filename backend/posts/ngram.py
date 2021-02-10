@@ -17,13 +17,15 @@ class NGram():
     def get_bigram(self):
         terms_bigram = [list(bigrams(twit.split(" "))) for twit in self.data]
         bigram = list(itertools.chain(*terms_bigram))
-        bigram_counts = collections.Counter(bigram)
-        bigram_counts.most_common(20)
+        bigram_counts = collections.Counter(bigram).most_common(20)
+        # bigram_counts = bigram_counts.most_common(10)
+
+        print(bigram_counts)
 
 
         G = nx.Graph()
         # Create connections between nodes
-        for k, v in bigram_counts.items():
+        for k, v in bigram_counts:
             G.add_edge(k[0], k[1], weight=(v * 10))
 
         fig, ax = plt.subplots(figsize=(10, 8))
@@ -33,9 +35,9 @@ class NGram():
         # Plot networks
         nx.draw_networkx(G, pos,
                         font_size=16,
+                        node_color='purple',
                         width=3,
                         edge_color='grey',
-                        node_color='purple',
                         with_labels = False,
                         ax=ax)
 
