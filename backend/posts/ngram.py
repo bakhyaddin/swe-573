@@ -20,9 +20,6 @@ class NGram():
         bigram_counts = collections.Counter(bigram).most_common(20)
         # bigram_counts = bigram_counts.most_common(10)
 
-        print(bigram_counts)
-
-
         G = nx.Graph()
         # Create connections between nodes
         for k, v in bigram_counts:
