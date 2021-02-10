@@ -25,7 +25,7 @@ const Routes = () => {
       useCheckToken()
         .then(() => {})
         .catch(() => {
-          window.location.hostname('/logout');
+          window.location.assign('/logout');
         });
     }
   }, [user]);

@@ -18,7 +18,7 @@ const Main = () => {
     getReuqestedData(values)
       .then(() => message.success('Your results are ready!'))
       .catch(() => message.error('Something went wrong!'))
-      .finally(setLoading(false));
+      .finally(() => setLoading(false));
   };
   return (
     <>

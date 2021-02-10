@@ -18,7 +18,11 @@ const Results = () => {
 
   const fetchResults = () => {
     getResults()
-      .then((res) => setResults(res.map((result) => ({ ...result, open: false }))))
+      .then((res) => {
+        // eslint-disable-next-line no-nested-ternary
+        const ress = res.sort((a, b) => ((b.id > a.id) ? 1 : ((a.id > b.id) ? -1 : 0)));
+        setResults(ress.map((result) => ({ ...result, open: false })));
+      })
       .catch((err) => message.error(err.detail))
       .finally(() => setLoading(false));
   };
