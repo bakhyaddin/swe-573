@@ -89,7 +89,6 @@ class PostsAPIView(APIView):
 
                 return Response("SUP", HTTP_200_OK)
             except Exception as e:
-                print(e)
                 entity.delete()
                 return Response({"message": "Database error"}, HTTP_500_INTERNAL_SERVER_ERROR)
         
