@@ -64,7 +64,10 @@ class PostsAPIView(APIView):
                     """create the twit in the database"""
                     
                     # getting the twit data cleaned
-                    cleaned_text = clean_data(twit["text"])
+                    try:
+                        cleaned_text = clean_data(twit["text"])
+                    except Exception as e:
+                        print(e)
                     
                     # sentiment alalysis for each twit
                     sentiment.data = cleaned_text
@@ -74,7 +77,7 @@ class PostsAPIView(APIView):
                             text=twit["text"],
                             cleaned_text=cleaned_text,
                             entity=entity,
-                            created_at=datetime.fromisoformat(twit["created_at"][:-1]),
+                            created_at=twit["created_at"],
                             sentiment=sentiment.analyze()
                         )
                         tw.save()
@@ -85,6 +88,7 @@ class PostsAPIView(APIView):
                 """ Analyze Data """
                 # get all recently created twits
                 twits = Twits.objects.all().filter(entity=entity)
+
                 analyze_data(twit_serialiazer, twits, user_id, result_types, searched_entity)
 
                 return Response("SUP", HTTP_200_OK)

@@ -17,6 +17,7 @@ const Results = () => {
   const { ismobile } = useMediaQuery();
 
   const fetchResults = () => {
+    setLoading(true);
     getResults()
       .then((res) => {
         // eslint-disable-next-line no-nested-ternary

@@ -52,11 +52,13 @@ export const WordCloudContainer = styled.div`
 
 export const GraphContainer = styled.div`
     display: flex;
+    align-items: center;
     flex-flow: column;
     overflow: scroll;
     padding: 15px 0px;
+    width: 100%;
 
     img{
-        width: 100%
+        width: 80%
     }
 `;

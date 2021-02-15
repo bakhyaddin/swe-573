@@ -21,20 +21,22 @@ class NGram():
         # bigram_counts = bigram_counts.most_common(10)
 
         G = nx.Graph()
-        # Create connections between nodes
         for k, v in bigram_counts:
-            G.add_edge(k[0], k[1], weight=(v * 10))
+            G.add_edge(k[0], k[1], weight=(v/10))
+
+        edges = G.edges()
+        weights = [G[u][v]['weight'] for u,v in edges]
 
         fig, ax = plt.subplots(figsize=(10, 8))
+        ax.axis('off')
 
         pos = nx.spring_layout(G, k=2)
 
-        # Plot networks
         nx.draw_networkx(G, pos,
-                        font_size=16,
-                        node_color='purple',
-                        width=3,
-                        edge_color='grey',
+                        font_size=13,
+                        node_color='#1D3357',
+                        width=weights,
+                        edge_color='#72E2B2',
                         with_labels = False,
                         ax=ax)
 
@@ -43,8 +45,8 @@ class NGram():
             x, y = value[0]+.135, value[1]+.045
             ax.text(x, y,
                     s=key,
-                    bbox=dict(facecolor='red', alpha=0.25),
-                    horizontalalignment='center', fontsize=13)
+                    # bbox=dict(facecolor='red', alpha=0.25),
+                    horizontalalignment='center', fontsize=8)
             
         buf = io.BytesIO()
         plt.savefig(buf, format='png', bbox_inches='tight')

@@ -69,6 +69,7 @@ const ResultCard = ({ rs, deleteResult }) => {
       {result.open && (
       <>
         <Row style={{ width: '100%', height: '40px' }} justify="space-around" align="middle">
+          { result.sentiment_result && (
           <Row align="middle">
             <h1>
               Overall Sentiment:
@@ -76,6 +77,7 @@ const ResultCard = ({ rs, deleteResult }) => {
               {getTag(result.sentiment_result)}
             </h1>
           </Row>
+          )}
 
           <h1>{`Number of Twits: ${result.twits.length}`}</h1>
         </Row>

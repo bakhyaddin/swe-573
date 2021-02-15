@@ -60,7 +60,7 @@ def fetch_twits():
                     text=twit["text"],
                     cleaned_text=cleaned_text,
                     entity=entity,
-                    created_at=datetime.fromisoformat(twit["created_at"][:-1]),
+                    created_at=twit["created_at"],
                     sentiment=sentiment.analyze()
                 )
                 tw.save()
