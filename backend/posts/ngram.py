@@ -24,18 +24,9 @@ class NGram():
         all_weights = [v for k, v in bigram_counts]
         maxmimum = max(all_weights)
         minimum = min(all_weights)
-        s = sum(all_weights)
-
-        # std = numpy.std(all_weights)
-        # mean = numpy.mean(all_weights)
-
-        # train3['SalePrice']-train3['SalePrice'].mean())/train3['SalePrice'].std()
-
-
 
         for k, v in bigram_counts:
             weight = (9 * ((v - minimum)/(maxmimum - minimum))) + 1
-            print(weight)
             G.add_edge(k[0], k[1], weight=weight)
 
         edges = G.edges()

@@ -26,9 +26,11 @@ from posts.wordcloud import GenerateWordCloud
 from posts.ngram import NGram
 import utils
 
+
 get_recent_posts = recent.Recent()
 get_recent_posts.bearer_token = config('TWITTER_BEARER_TOKEN')
 clean_data = CleanData().clean_data
+stop_words = CleanData().stopwords
 sentiment = Sentiment()
 wordcloud = GenerateWordCloud()
 ngram = NGram()
@@ -108,7 +110,7 @@ class PostsAPIView(APIView):
                         cleaned_text = clean_data(twit_serialiazer(twit).data["text"])
                     except Exception as e:
                         print(e)
-                        
+
                     if not twit.cleaned_text:
                         try:
                             twit.cleaned_text=cleaned_text
@@ -165,7 +167,13 @@ def analyze_data(twit_serialiazer, twits, user_id, result_types, entity):
     # fetching all cleaned data from the DB
 
     all_cleaned_text = [twit_serialiazer(twit).data["cleaned_text"] for twit in twits]
+
+    for x in all_cleaned_text:
+        querywords = x.split()
+        resultwords  = [word for word in querywords if word.lower() not in stop_words]
+        all_cleaned_text[all_cleaned_text.index(x)] = ' '.join(resultwords)
     
+    print(all_cleaned_text)
     # getting the user
     user = UserTemplate.objects.get(id = user_id)
     
