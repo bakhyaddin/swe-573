@@ -173,7 +173,6 @@ def analyze_data(twit_serialiazer, twits, user_id, result_types, entity):
         resultwords  = [word for word in querywords if word.lower() not in stop_words]
         all_cleaned_text[all_cleaned_text.index(x)] = ' '.join(resultwords)
     
-    print(all_cleaned_text)
     # getting the user
     user = UserTemplate.objects.get(id = user_id)
     

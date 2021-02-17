@@ -19,5 +19,3 @@ urlpatterns = [
     path('delete-result/<int:pk>/', views.DeleteResultsAPI.as_view(), name='delete-results'),
     path('get-all-twits/', views.GetAllTwitsAPI.as_view(), name='get-all-twits')
 ]
-
-# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
