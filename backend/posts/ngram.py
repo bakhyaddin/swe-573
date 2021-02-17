@@ -21,8 +21,14 @@ class NGram():
         # bigram_counts = bigram_counts.most_common(10)
 
         G = nx.Graph()
+
+        all_weights = [v for k, v in bigram_counts]
+
         for k, v in bigram_counts:
-            G.add_edge(k[0], k[1], weight=(v/10))
+            p = all_weights.max()
+            q = len(str(abs(p)))
+
+            G.add_edge(k[0], k[1], weight=(v/10**q))
 
         edges = G.edges()
         weights = [G[u][v]['weight'] for u,v in edges]
