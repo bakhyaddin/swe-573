@@ -6,7 +6,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import networkx as nx
 import itertools
 import collections
-
+import numpy
 import io
 
 import urllib
@@ -18,16 +18,25 @@ class NGram():
         terms_bigram = [list(bigrams(twit.split(" "))) for twit in self.data]
         bigram = list(itertools.chain(*terms_bigram))
         bigram_counts = collections.Counter(bigram).most_common(20)
-        # bigram_counts = bigram_counts.most_common(10)
 
         G = nx.Graph()
 
         all_weights = [v for k, v in bigram_counts]
         maxmimum = max(all_weights)
         minimum = min(all_weights)
+        s = sum(all_weights)
+
+        # std = numpy.std(all_weights)
+        # mean = numpy.mean(all_weights)
+
+        # train3['SalePrice']-train3['SalePrice'].mean())/train3['SalePrice'].std()
+
+
 
         for k, v in bigram_counts:
-            G.add_edge(k[0], k[1], weight=(v - minimum/maxmimum-minimum))
+            weight = (9 * ((v - minimum)/(maxmimum - minimum))) + 1
+            print(weight)
+            G.add_edge(k[0], k[1], weight=weight)
 
         edges = G.edges()
         weights = [G[u][v]['weight'] for u,v in edges]
