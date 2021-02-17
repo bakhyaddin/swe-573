@@ -101,9 +101,14 @@ class PostsAPIView(APIView):
                 twits = Twits.objects.all().filter(entity=entity)
 
 
+
                 # creating cleaned_text filed in the twits that do not have
                 for twit in twits:
-                    cleaned_text = clean_data(twit_serialiazer(twit).data["text"])
+                    try:
+                        cleaned_text = clean_data(twit_serialiazer(twit).data["text"])
+                    except Exception as e:
+                        print(e)
+                        
                     if not twit.cleaned_text:
                         try:
                             twit.cleaned_text=cleaned_text

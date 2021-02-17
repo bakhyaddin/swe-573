@@ -23,12 +23,11 @@ class NGram():
         G = nx.Graph()
 
         all_weights = [v for k, v in bigram_counts]
+        maxmimum = max(all_weights)
+        minimum = min(all_weights)
 
         for k, v in bigram_counts:
-            p = all_weights.max()
-            q = len(str(abs(p)))
-
-            G.add_edge(k[0], k[1], weight=(v/10**q))
+            G.add_edge(k[0], k[1], weight=(v - minimum/maxmimum-minimum))
 
         edges = G.edges()
         weights = [G[u][v]['weight'] for u,v in edges]
