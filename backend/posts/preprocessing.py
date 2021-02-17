@@ -7,9 +7,10 @@ nltk.download('wordnet')
 
 class CleanData:
     validator = URLValidator()
-    stopwords = ['i', 'me', 'my', 'myself', 'we', "we're", 'our', 'ours', 'ourselves', 'you', "you're", "you've", "u", "y",
-        "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 
-        'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 
+    stopwords = ['i', "i'm", "it's", 'me', 'my', 'myself', 'we', "we're", 'our', 'ours', 'ourselves',
+        "you're", "mine", "we're", "i've", "u've", "u're", "he's", "they're", "they've", "have't",
+        'you', "you're", "you've", "u", "y", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves',
+        'he', 'him', 'his', 'himself', 'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 
         'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 
         'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 
         'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until',
