@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import { Modal as AntdModal } from 'antd';
 
-export default styled.div`
+export const LoginStyled = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -53,4 +54,24 @@ export default styled.div`
             margin-top: 10px;
         }
     }
+`;
+
+export const Modal = styled(AntdModal)`
+    .buttons-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+
+            .button {
+                width: 100%;
+                &.left{
+                    margin-right: 5px;
+                }
+                &.right{
+                    margin-left: 5px;
+                }
+            }
+        }
 `;

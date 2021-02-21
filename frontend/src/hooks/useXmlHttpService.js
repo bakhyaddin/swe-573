@@ -49,6 +49,22 @@ const useRegister = async (userdata) => {
   }
 };
 
+const useChangePassword = async (userdata) => {
+  try {
+    const response = await xmlHttpRequest({
+      method: 'PUT',
+      path: 'auth/change-password/',
+      body: {
+        email: userdata.email,
+        password: userdata.password,
+      },
+    });
+    return Promise.resolve(response);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 const getReuqestedData = async (values) => {
   try {
     const response = await xmlHttpRequest({
@@ -91,4 +107,5 @@ const deleteResult = async (id) => {
 
 export {
   useLogin, useRegister, getReuqestedData, useCheckToken, getResults, deleteResult,
+  useChangePassword,
 };

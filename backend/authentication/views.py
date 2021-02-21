@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, GenericAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, GenericAPIView, UpdateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
@@ -62,10 +62,41 @@ class UserRetrieveAPIView(RetrieveAPIView):
     queryset = UserTemplate.objects.all()
 
 
+class ChangePassword(UpdateAPIView):
+    serializer_class = UserDataSerializer
+    queryset = UserTemplate.objects.all()
+
+    def put(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        password = request.data.get('password', None)
+        user = UserTemplate.objects.filter(email=email).first()
+        if not user:
+            raise ValidationError({"detail": ["User does not exist."]})
+        
+        print("PAASS", password)
+
+        user = UserTemplate.objects.get(email=email)
+        user.set_password(password)
+        user.is_verified = False
+        user.save()
+
+        payload = jwt_payload_handler(user)
+        token = jwt_encode_handler(payload)
+
+        current_site = get_current_site(request).domain
+        relative_link = reverse("verify-email")
+        abs_url = "http://"+current_site + relative_link + "?token=" + str(token)
+
+        email_body = "Hi " + email + "\n Please click the link to change email. \n" + abs_url
+        subject = "Confirm your email"
+        send_email(email_body, subject, email)
+
+        return Response(self.serializer_class(user).data, status=200)
+
+
 class UserDeleteAPIView(DestroyAPIView):
     serializer_class = UserDeleteSerializer
     queryset = UserTemplate.objects.all()
-
 
     def delete(self, request, *args, **kwargs):
         user = UserTemplate.objects.filter(id=kwargs.get("pk")).first()
