@@ -66,9 +66,9 @@ const Login = () => {
           </div>
         </Form>
         <div className="forgot-password">
-          <p href="">
+          {/* <p href="">
             Forgot password?
-          </p>
+          </p> */}
         </div>
       </div>
     </LoginStyled>

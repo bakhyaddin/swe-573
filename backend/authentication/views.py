@@ -33,7 +33,7 @@ class UserCreateAPIView(CreateAPIView):
         set = request.data.get('email')
         sor = UserTemplate.objects.filter(email=set)
         if sor.count():
-            raise ValidationError({"email": ["A user with that email already exists."]})
+            raise ValidationError({"detail": ["A user with that email already exists."]})
         else:
             return_data = (self.create(request, *args, **kwargs)).data
             user = UserTemplate.objects.get(email=return_data["email"])
@@ -45,7 +45,7 @@ class UserCreateAPIView(CreateAPIView):
             relative_link = reverse("verify-email")
             abs_url = "http://"+current_site + relative_link + "?token=" + str(token)
 
-            email_body = "Hi " + user_email + ". \n Please click the link to register. \n" + abs_url
+            email_body = "Hi " + user_email + "\n Please click the link to register. \n" + abs_url
             subject = "Verify your email"
 
             send_email(email_body, subject, user_email)
@@ -94,7 +94,7 @@ class VerifyEmail(GenericAPIView):
         if settings.IS_LOCAL:
             redirect_to = "http://127.0.0.1:3000/login"
         else:
-            redirect_to = "http://3.249.247.122/login"
+            redirect_to = "http://34.245.63.89/login"
         
         try:
             payload = jwt.decode(token, config('DJANGO_SECRET_KEY'))
