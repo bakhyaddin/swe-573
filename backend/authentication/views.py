@@ -45,7 +45,7 @@ class UserCreateAPIView(CreateAPIView):
             relative_link = reverse("verify-email")
             abs_url = "http://"+current_site + relative_link + "?token=" + str(token)
 
-            email_body = "Hi " + user_email + "\n Please click the link to register. \n" + abs_url
+            email_body = "Hi " + user_email + "\nPlease click the link to register. \n" + abs_url
             subject = "Verify your email"
 
             send_email(email_body, subject, user_email)
@@ -87,7 +87,7 @@ class ChangePassword(UpdateAPIView):
         relative_link = reverse("verify-email")
         abs_url = "http://"+current_site + relative_link + "?token=" + str(token)
 
-        email_body = "Hi " + email + "\n Please click the link to change email. \n" + abs_url
+        email_body = "Hi " + email + "\nPlease click the link to change your password. \n" + abs_url
         subject = "Confirm your email"
         send_email(email_body, subject, email)
 
