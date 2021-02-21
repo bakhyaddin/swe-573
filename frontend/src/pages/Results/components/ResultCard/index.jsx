@@ -79,7 +79,7 @@ const ResultCard = ({ rs, deleteResult }) => {
           </Row>
           )}
 
-          <h1>{`Number of Twits: ${result.twits.length}`}</h1>
+          <h1>{`Number of Twits: ${result.number_of_twits}`}</h1>
         </Row>
         <Table data={result.twits} />
       </>

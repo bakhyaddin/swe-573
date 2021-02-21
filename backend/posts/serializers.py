@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField, SerializerMethodField
 
 from posts.models import SearchedEntities, Twits, Results
 
@@ -15,7 +15,31 @@ class TwitSerializer(ModelSerializer):
 
 
 class ResultsSerializer(ModelSerializer):
-    twits = TwitSerializer(many=True)
+    twits = SerializerMethodField("last_hundred_twits")
+    number_of_twits = SerializerMethodField("get_number_of_twits")
+
     class Meta:
         model = Results
-        fields = '__all__'
+        fields = (
+            "id",
+            "created_at",
+            "entity",
+            "graph_img",
+            "sentiment_result",
+            "twits",
+            "user_id",
+            "wordcloud_img",
+            "number_of_twits"
+        )
+
+    def last_hundred_twits(self, results):
+        try:
+            qs = list(results.twits.all())[-100:]
+        except Exception as e:
+            print(e)
+
+        serializer = TwitSerializer(instance=qs, many=True)
+        return serializer.data
+
+    def get_number_of_twits(self, results):
+        return len(list(results.twits.all()))
